@@ -1,34 +1,47 @@
 const handleClickUpload = (files, setLoadings) => () => {
-
+  if (!files || !Array.isArray(files)) return;
 
   const loadings = [];
+
   for (const file of files) {
     loadings.push({
       name: file.name,
       status: 'loading',
     })
   }
+
   setLoadings(loadings);
 
-  for (let fileIndex = 0; fileIndex < files.length; fileIndex++) {
-    const file = files.item(fileIndex);
+  const apiCalls = [];
 
-    // 업로드 mock
-    const delay = Math.floor(Math.random() * (4000 - 2000)) + 2000; // 2~4초 랜덤으로
+  for (let fileIndex = 0; fileIndex < files.length; fileIndex++) {
+    const file = files[fileIndex];
+
+    // file upload mock
+    const delay = Math.floor(Math.random() * 1000) + 1000; // mock upload delay 1sec~2sec
     const uploadPromise = new Promise(resolve => {
       setTimeout(() => {
         resolve();
       }, delay);
     });
 
-    uploadPromise.then(() => {
-      const data = {
-        name: file.name,
-        status: 'finished',
-      };
-      setLoadings(loadings => loadings.map((loading, index) => fileIndex === index ? data : loading));
+    const apiCall = uploadPromise.then(() => {
+      setLoadings(loadings => {
+        const newLoadings = loadings.slice(); // array deep copy
+
+        newLoadings[fileIndex] = {
+          name: file.name,
+          status: 'finished',
+        };
+
+        return newLoadings;
+      });
     })
+
+    apiCalls.push(apiCall);
   }
+
+  return Promise.all(apiCalls);
 }
 
 export default handleClickUpload;

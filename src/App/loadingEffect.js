@@ -1,5 +1,11 @@
 const loadingEffect = (loadings, setFinishedAll) => () => {
-  setFinishedAll(loadings.length > 0 && loadings.reduce((acc, loading) => acc && loading.status === 'finished', true));
+  const finishAll = !!( // Boolean coercion
+    loadings &&
+    Array.isArray(loadings) &&
+    loadings.reduce((acc, loading) => acc && loading.status === 'finished', true)
+  )
+
+  setFinishedAll(finishAll);
 }
 
 export default loadingEffect;
