@@ -1,18 +1,17 @@
 const handleClickUpload = (files, setLoadings) => () => {
 
 
-  const indicators = [];
+  const loadings = [];
   for (const file of files) {
-    indicators.push({
+    loadings.push({
       name: file.name,
       status: 'loading',
     })
   }
+  setLoadings(loadings);
 
-  setLoadings(indicators);
-
-  for (let i = 0; i < files.length; i++) {
-    const file = files.item(i);
+  for (let fileIndex = 0; fileIndex < files.length; fileIndex++) {
+    const file = files.item(fileIndex);
 
     // 업로드 mock
     const delay = Math.floor(Math.random() * (4000 - 2000)) + 2000; // 2~4초 랜덤으로
@@ -27,7 +26,7 @@ const handleClickUpload = (files, setLoadings) => () => {
         name: file.name,
         status: 'finished',
       };
-      setLoadings(loadings => loadings.map((loading, _index) => i === _index ? data : loading));
+      setLoadings(loadings => loadings.map((loading, index) => fileIndex === index ? data : loading));
     })
   }
 }

@@ -1,13 +1,13 @@
 const fileSelectedEffect = (files, setLoadings) => () => {
-  const indicators = [];
+  const loadings = [];
   for (const file of files) {
-    indicators.push({
+    loadings.push({
       name: file.name,
       status: 'ready',
     })
   }
 
-  setLoadings(indicators);
+  setLoadings(loadings);
 }
 
 export default fileSelectedEffect;
